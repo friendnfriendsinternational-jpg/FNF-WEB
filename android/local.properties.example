@@ -1,0 +1,7 @@
+## Copy this file to local.properties and fill in your Flutter SDK path
+## Example:
+sdk.dir=/Users/username/Library/Android/sdk
+flutter.sdk=/Users/username/fvm/default
+flutter.buildMode=debug
+flutter.versionName=1.0.0
+flutter.versionCode=1
