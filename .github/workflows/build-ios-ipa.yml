@@ -1,0 +1,37 @@
+name: Build iOS IPA (No Mac Needed)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios-ipa:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Flutter pub get
+        run: flutter pub get
+
+      - name: Build iOS app (no codesign)
+        run: flutter build ios --release --no-codesign
+
+      - name: Package unsigned IPA
+        run: |
+          rm -rf Payload
+          mkdir -p Payload
+          cp -R build/ios/iphoneos/Runner.app Payload/
+          rm -f fnf-unsigned.ipa
+          /usr/bin/zip -r fnf-unsigned.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fnf-unsigned-ipa
+          path: fnf-unsigned.ipa
